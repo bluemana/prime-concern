@@ -1,0 +1,12 @@
+# Ignore OS X directory files
+.DS_Store
+
+# Ignore Eclipse files
+/.classpath
+/.project
+/.settings
+/bin
+
+# Ignore Gradle files
+/.gradle
+/build
