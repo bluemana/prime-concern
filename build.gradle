@@ -8,4 +8,26 @@ repositories {
 }
 
 dependencies {
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.2.0'
+    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.2.0'
+}
+
+run {
+    // This allows to pass arguments to the app from the command line.
+    // For example: ./gradlew run -PappArgs=[10]
+    if (project.hasProperty('appArgs')) {
+        args Eval.me(appArgs)
+    }
+}
+
+test {
+    useJUnitPlatform()
+
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+    }
+
+    reports {
+        html.enabled = true
+    }
 }
