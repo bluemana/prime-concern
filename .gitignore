@@ -10,3 +10,7 @@
 # Ignore Gradle files
 /.gradle
 /build
+
+# Ignore app runtime files
+/logs
+

@@ -1,0 +1,37 @@
+sourceSets {
+    performanceTest {
+        java.srcDirs = ['src/test/performance/java']
+        resources.srcDirs = ['src/test/performance/resources']
+    }
+}
+
+dependencies {
+    performanceTestCompile sourceSets.main.output
+    performanceTestCompile 'org.junit.jupiter:junit-jupiter-api:5.2.0'
+    performanceTestRuntime 'org.junit.jupiter:junit-jupiter-engine:5.2.0'
+}
+
+task performanceTest(type: Test) {
+    group = 'Verification'
+    description = 'Runs performance tests.'
+    useJUnitPlatform()
+    testClassesDirs = sourceSets.performanceTest.output
+    classpath = sourceSets.performanceTest.runtimeClasspath
+    failFast = true
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+    }
+    reports {
+        html.enabled = true
+    }
+    jvmArgs = [
+        // 1. Java HotSpot VM options
+        '-XX:+PrintCommandLineFlags',
+        '-XX:+HeapDumpOnOutOfMemoryError',
+        '-XX:HeapDumpPath=./logs/',
+        // 1.1 Heap size options
+        '-XX:InitialHeapSize=128M', // Same as -Xms128M
+        '-XX:MaxHeapSize=2G', // Same as -Xmx2G
+    ]
+    mkdir('./logs') // Create the heap dump directory
+}
