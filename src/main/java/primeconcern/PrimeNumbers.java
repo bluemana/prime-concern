@@ -1,6 +1,6 @@
 package primeconcern;
 
-import java.util.Arrays;
+import java.util.BitSet;
 
 public class PrimeNumbers {
 
@@ -13,30 +13,22 @@ public class PrimeNumbers {
 	 */
 	public static int[] primeNumbers(int n) {
 		if (n >= 2) {
-			boolean[] primes = new boolean[n];
-			Arrays.fill(primes, true);
-			int stop = ((int) Math.sqrt(n)) - 1;
-			for (int i = 1; i <= stop; i++) {
-				if (primes[i]) {
-					int prime = i + 1;
-					for (int j = ((int) Math.pow(prime, 2)) - 1; j < primes.length; j += prime) {
-						primes[j] = false;
-					}
+			BitSet primes = new BitSet(n - 1);
+			primes.flip(0, n - 1);
+			int iStop = ((int) Math.sqrt(n)) - 2;
+			for (int i = primes.nextSetBit(0); i >= 0 && i <= iStop; i = primes.nextSetBit(i + 1)) {
+				int prime = i + 2;
+				int jStop = Math.min(Integer.MAX_VALUE - prime, n) - 1;
+				for (int j = ((int) Math.pow(prime, 2)) - 2; j < jStop; j += prime) {
+					primes.clear(j);
 				}
 			}
-			int primesCount = 0;
-			for (int i = 1; i < primes.length; i++) {
-				if (primes[i]) {
-					primesCount++;
-				}
-			}
+			int primesCount = primes.cardinality();
 			int[] result = new int[primesCount];
 			int resultIdx = 0;
-			for (int i = 1; i < primes.length; i++) {
-				if (primes[i]) {
-					result[resultIdx] = i + 1;
-					resultIdx++;
-				}
+			for (int i = primes.nextSetBit(0); i >= 0; i = primes.nextSetBit(i + 1)) {
+				result[resultIdx] = i + 2;
+				resultIdx++;
 			}
 			return result;
 		} else {
