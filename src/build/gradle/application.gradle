@@ -12,8 +12,10 @@ mkdir('./logs') // Create the heap dump directory
 
 run {
     // This allows to pass arguments to the app from the command line.
-    // For example: ./gradlew run -PappArgs=[10]
-    if (project.hasProperty('appArgs')) {
-        args Eval.me(appArgs)
+    // For example: ./gradlew run -Pn=10 -Po=./logs/result.txt
+    if (project.hasProperty('n') &&
+            project.hasProperty('o')) {
+        args = ['-n=' + project.getProperty('n'),
+                '-o=' + project.getProperty('o')]
     }
 }
